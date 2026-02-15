@@ -1,0 +1,74 @@
+{
+  "name": "Rust Book - 実践 Rustプログラミング入門",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-bookworm",
+
+  "features": {
+    // Git (通常プリインストール済みだが明示的に指定)
+    "ghcr.io/devcontainers/features/git:1": {},
+    // GitHub CLI
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // コンテナ作成後にRustツールチェーンと追加ツールをセットアップ
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // rust-analyzer の設定
+        "rust-analyzer.check.command": "clippy",
+        "rust-analyzer.cargo.buildScripts.enable": true,
+        "rust-analyzer.procMacro.enable": true,
+        // 各サンプルが独立したプロジェクトのため、linkedProjectsで明示的に管理しない
+        "rust-analyzer.linkedProjects": [],
+        // discoverProjectConfig で Cargo.toml を自動検出
+        "rust-analyzer.cargo.sysroot": "discover",
+
+        // エディタ設定
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer",
+          "editor.formatOnSave": true
+        },
+
+        // ファイル関連
+        "files.watcherExclude": {
+          "**/target/**": true
+        },
+        "files.exclude": {
+          "**/target": true
+        },
+
+        // ターミナル設定
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        // Rust開発の必須拡張機能
+        "rust-lang.rust-analyzer",
+        // デバッガ
+        "vadimcn.vscode-lldb",
+        // TOML サポート (Cargo.toml 編集用)
+        "tamasfe.even-better-toml",
+        // Crates.io 依存関係管理
+        "serayuzgur.crates",
+        // エラーレンズ (インラインエラー表示)
+        "usernamehw.errorlens",
+        // Git 関連
+        "eamodio.gitlens"
+      ]
+    }
+  },
+
+  // ポートフォワーディング (ch05 の actix-web サンプル用)
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Web App (actix-web)",
+      "onAutoForward": "notify"
+    }
+  },
+
+  // コンテナ内で vscode ユーザーとして実行
+  "remoteUser": "vscode"
+}
